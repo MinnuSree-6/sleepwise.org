@@ -152,12 +152,7 @@
 
     <div class="time-row">
       <select id="hour"></select>
-      <select id="minute">
-        <option value="0">00</option>
-        <option value="15">15</option>
-        <option value="30">30</option>
-        <option value="45">45</option>
-      </select>
+      <select id="minute"></select>
       <select id="ampm">
         <option value="AM">AM</option>
         <option value="PM">PM</option>
@@ -172,8 +167,9 @@
   </div>
 
 <script>
-  let mode = 'wake'; // 'wake' = calculate bedtime, 'bed' = calculate wake-up
+  let mode = 'wake';
 
+  // Fill hours 1-12
   const hourSelect = document.getElementById('hour');
   for (let h = 1; h <= 12; h++) {
     const opt = document.createElement('option');
@@ -181,6 +177,15 @@
     opt.textContent = h;
     if (h === 7) opt.selected = true;
     hourSelect.appendChild(opt);
+  }
+
+  // Fill minutes 00-59
+  const minuteSelect = document.getElementById('minute');
+  for (let m = 0; m <= 59; m++) {
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = m < 10 ? '0' + m : m;
+    minuteSelect.appendChild(opt);
   }
 
   function switchTab(newMode) {
@@ -206,7 +211,7 @@
 
   function calculate() {
     let hour = parseInt(hourSelect.value, 10);
-    const minute = parseInt(document.getElementById('minute').value, 10);
+    const minute = parseInt(minuteSelect.value, 10);
     const ampm = document.getElementById('ampm').value;
 
     if (ampm === 'PM' && hour !== 12) hour += 12;
@@ -221,7 +226,7 @@
     const cycles = [6, 5, 4, 3];
 
     cycles.forEach(c => {
-      const minutesDelta = c * 90 + 15; // +15 min to fall asleep
+      const minutesDelta = c * 90 + 15;
       const t = new Date(base);
       if (mode === 'wake') {
         t.setMinutes(t.getMinutes() - minutesDelta);
@@ -239,10 +244,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
